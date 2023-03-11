@@ -7,7 +7,9 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-
+    
+    // LineConnected = 현재 역에서 탈 수 있는 노선리스트
+    // StationConnected = 현재 노선에서 갈 수 있는 역
     static ArrayList<Integer>[] LineConnected, StationConnected;
     static int n, m, start, end;
     
@@ -62,7 +64,8 @@ public class Main {
         boolean[] visitedStation = new boolean[n+1];
         boolean[] visitedLine = new boolean[m+1];
         visitedStation[start] = true;
-
+        
+        // 시작역에서 탈 수 있는 노선들 큐에 넣고 방문 처리
         for(int i : LineConnected[start]){
             queue.add(new Node(start, i, 0));
             visitedLine[i] = true;
@@ -71,16 +74,21 @@ public class Main {
         while(!queue.isEmpty()){
             Node cur = queue.poll();
 
+            // 현재 역이 도착 역이라면 return
             if(cur.station == end){
                 return cur.cnt;
             }
-
+            
+            // 현재 노선에서 갈 수 있는 역들 체크
             for(int nextStation : StationConnected[cur.line]){
+                // 역 방문안했다면 방문처리하고 큐에 해당 역 넣기
                 if(!visitedStation[nextStation]){
                     visitedStation[nextStation] = true;
                     queue.add(new Node(nextStation, cur.line, cur.cnt));
-
+                    
+                    // 다음 역에서 갈 수 있는 노선들 체크
                     for(int nextLine : LineConnected[nextStation]){
+                        // 노선 방문안했다면 방문처리하고 큐에 노선과 시간+1 해주고 큐에 넣기
                         if(!visitedLine[nextLine]){
                             visitedLine[nextLine] = true;
                             queue.add(new Node(nextStation,nextLine, cur.cnt+1));
@@ -89,6 +97,8 @@ public class Main {
                 }
             }
         }
+        
+        // 큐가 빌때까지 방문 못했다면 -1
         return -1;
     }
 }
