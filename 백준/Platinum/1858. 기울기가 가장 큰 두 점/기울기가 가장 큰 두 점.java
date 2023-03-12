@@ -88,7 +88,7 @@ public class Main {
             // 현재 좌표
             int curx = List.get(i).x;
             int cury = List.get(i).y;
-            // 옆 좌표
+            // 다음 좌표
             int nextx = List.get(i+1).x;
             int nexty = List.get(i+1).y;
             // 기울기
@@ -122,6 +122,7 @@ public class Main {
             if((double)(Math.abs(cury-copyList.get(i).y)/Math.abs(curx-copyList.get(i).x)) == result.weight){
                 // 리스트는 0부터 시작했으므로 +1 해주기
                 endIndex = i+1;
+                // 찾았다면 더 큰 좌표는 볼 필요없으므로 break;
                 break;
             }
         }
