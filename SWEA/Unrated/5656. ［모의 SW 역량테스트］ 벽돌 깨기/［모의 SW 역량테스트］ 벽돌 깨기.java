@@ -34,8 +34,11 @@ public class Solution {
                     map[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
+            
+            // 몇번째 칸에 구슬을 놓을지 저장할 배열 
             numbers = new int[N];
 
+            // 구슬 넣을 배열 만들 메소드
             Combination(W, 0);
 
             sb.append("#" + test + " " + result).append("\n");
@@ -43,6 +46,7 @@ public class Solution {
         System.out.println(sb);
     }
 
+    // 배열 받아서 벽돌 깨기
     private static void Brick(int[] arr) {
         map2 = new int[H][W];
 
@@ -57,6 +61,8 @@ public class Solution {
 
             int k = arr[i];
             int x = 0;
+            
+            // 구슬과 가장 먼저 만나는 벽돌 찾기
             for(int z = 0 ; z < H ; z++) {
                 if(map2[z][k] != 0) {
                     x = z;
@@ -68,12 +74,14 @@ public class Solution {
             q.add(new int[] {x,k});
             visited[x][k] = true;
 
+            // 큐가 종료될때까지 벽돌 깨기
             while(!q.isEmpty()) {
                 int[] a = q.poll();
 
                 int size = map2[a[0]][a[1]];
                 map2[a[0]][a[1]] = 0;
 
+                // 아래쪽으로 벽돌깨기
                 for(int z = 1 ; z < size ; z++) {
                     if(a[0] + z >= 0 && a[0]+z < H) {
                         if(map2[a[0]+z][a[1]] != 0 && visited[a[0]+z][a[1]] == false) {
@@ -82,6 +90,7 @@ public class Solution {
                         }
                     }
 
+                    // 위쪽으로 벽돌깨기
                     if(a[0]-z >= 0 && a[0] - z < H) {
                         if(map2[a[0]-z][a[1]] != 0 && visited[a[0]-z][a[1]] == false) {
                             q.add(new int[] {a[0]-z, a[1]});
@@ -89,6 +98,7 @@ public class Solution {
                         }
                     }
 
+                    // 오른쪽으로 벽돌깨기
                     if(a[1]+z >= 0 && a[1] + z < W) {
                         if(map2[a[0]][a[1]+z] != 0 && visited[a[0]][a[1]+z] == false) {
                             q.add(new int[] {a[0], a[1]+z});
@@ -96,6 +106,7 @@ public class Solution {
                         }
                     }
 
+                    // 왼쪽으로 벽돌깨기
                     if(a[1]-z >= 0 && a[1] - z < W) {
                         if(map2[a[0]][a[1]-z] != 0 && visited[a[0]][a[1]-z] == false) {
                             q.add(new int[] {a[0], a[1]-z});
@@ -104,12 +115,15 @@ public class Solution {
                     }
                 }
             }
+            // 구슬 굴릴때마다 벽돌 깨고 남은 자리 채우기
             Move();
         }
         
+        // 구슬 3번 모두 굴려서 벽돌을 깨고 남은 벽돌 개수 카운팅
         Count();
     }
 
+    // 벽돌 깨고 비어있는 자리 아래로 
     private static void Move() {
         Queue<Integer>[] queue = new LinkedList[W];
 
@@ -134,9 +148,9 @@ public class Solution {
         }
     }
 
+    // 구슬을 놓을 3군데 고르는 메소드
     private static void Combination(int n, int cnt) {
         if(cnt == N) {
-//			System.out.println(Arrays.toString(numbers));
             Brick(numbers);
             return;
         }
@@ -148,6 +162,7 @@ public class Solution {
 
     }
 
+    // 총 3번의 구슬을 놓았을 때 남은 벽돌의 갯수 세고 결과값과 비교후 갱신
     private static void Count() {
         int sum = 0;
         for(int i = 0 ; i < H ; i++) {
