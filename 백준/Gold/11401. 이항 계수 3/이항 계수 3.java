@@ -27,7 +27,7 @@ public class Main {
         return result;
     }
 
-    // 역원 구하기
+    // 모듈러 역원 구하기
     private static long pow(long a, long b){
         if(b == 1){
             return a%p;
