@@ -28,11 +28,16 @@ public class Main {
             }
         }
 
+        // 방문 체크
         boolean[][] visited = new boolean[N][M];
+        // 공기인지 체크
         boolean[][] isAir = new boolean[N][M];
+        // BFS진행할 Queue
         Queue<int[]> queue = new LinkedList<>();
+        // 녹은 치즈들 저장할 배열
         ArrayList<int[]> List = new ArrayList<>();
-
+        
+        // 총 걸리는 
         int time = 0;
 
         while(cheeseNum > 0){
@@ -55,6 +60,7 @@ public class Main {
                 }
             }
 
+            // 치즈확인하기
             for(int i = 0 ; i < N ; i++){
                 for(int j = 0 ; j < M ; j++){
                     if(map[i][j] == 1 && !visited[i][j]){
@@ -65,6 +71,7 @@ public class Main {
                             int airnum = 0;
                             int[] cur = queue.poll();
 
+                            // 치즈 계속 방문하기
                             for(int k = 0 ; k < 4 ; k++){
                                 int changeX = cur[0] + dx[k];
                                 int changeY = cur[1] + dy[k];
@@ -73,11 +80,13 @@ public class Main {
                                         queue.add(new int[]{changeX, changeY});
                                         visited[changeX][changeY] = true;
                                     }
+                                    // 치즈 4방에 공기갯수 세기
                                     if(map[changeX][changeY] == 0 && isAir[changeX][changeY] == true){
                                         airnum++;
                                     }
                                 }
                             }
+                            // 공기갯수가 2개 이상이라면 녹는 치즈이므로 리스트에 추가
                             if(airnum >= 2){
                                 List.add(new int[] {cur[0], cur[1]});
                             }
@@ -85,13 +94,20 @@ public class Main {
                     }
                 }
             }
+            
+            // 남은 치즈개수 갱신
             cheeseNum -= List.size();
+            
+            // 녹은 치즈들 0으로 바꿔주기
             for(int[] o : List){
                 map[o[0]][o[1]] = 0;
             }
+            
+            // 리스트 초기화
             List.clear();
             time++;
 
+            // 배열 다시 초기화
             for(int i = 0 ; i < N ; i++){
                 for(int j = 0 ; j < M ; j++){
                     isAir[i][j] = false;
@@ -102,6 +118,7 @@ public class Main {
         System.out.println(time);
     }
 
+    // 좌표에 해당하는지 체크할 메소드
     private static boolean isPossible(int a, int b){
         if(a < 0 || a >= N || b < 0 || b >= M) return false;
 
