@@ -17,8 +17,10 @@ public class Main {
 		int tLength = text.length;
 		int pLength = pattern.length;
 		
+		// pattern의 좌표에서 다시 돌아가는 좌표 저장
 		int[] table = new int[pLength];
 		
+		// 테이블 설정
 		for(int i = 1, j = 0; i < pLength; i++) {
 			while(j > 0 && pattern[i] != pattern[j]) {
 				j = table[j-1];
@@ -31,8 +33,10 @@ public class Main {
 			}
 		}
 		
+		// 똑같은 pattern의 갯수
 		int cnt = 0;
-				
+		
+		// 똑같은 pattern 찾기
 		for(int i = 0, j = 0; i < tLength; ++i) {
 			
 			while(j > 0 && text[i] != pattern[j]) j = table[j-1];
