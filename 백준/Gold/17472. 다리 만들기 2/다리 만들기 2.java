@@ -15,6 +15,7 @@ public class Main {
 	static HashMap<Integer, Integer> hash;
 	static int[] parents;
 	
+	// 출발지, 목적지, 비용 저장할 
 	static class node implements Comparable<node>{
 		int start, end, path;
 
@@ -54,7 +55,10 @@ public class Main {
 			}
 		}
 		
+		// 나누어진 섬의 개수
 		int sector = 0;
+		
+		// 섬의 개수 BFS로 찾고 각 나라별 어느 섬에 소속되있는지 HashMap으로 저장
 		for(int i = 0 ; i < N ; i++) {
 			for(int j = 0 ; j < M ; j++) {
 				if(map[i][j] == 1 && !visited[i][j]) {
@@ -62,6 +66,7 @@ public class Main {
 					visited[i][j] = true;
 					hash.put(i*10+j, sector);
 					
+					// BFS 진행
 					while(!queue.isEmpty()) {
 						int[] cur = queue.poll();
 						
@@ -81,8 +86,11 @@ public class Main {
 				}
 			}
 		}
+		
+		// 각 섬별 가는데 가는 최소비용 저장할 배열
 		int[][] dist = new int[sector][sector];
 		
+		// 최소경로 구해야하므로 먼저 최대값으로 저장
 		for(int i = 0 ; i < sector ; i++) {
 			for(int j = 0 ; j < sector ; j++) {
 				if(i == j) continue;
@@ -93,22 +101,28 @@ public class Main {
 		int x;
 		int y;
 		
+		// 각 나라별 다른 섬으로 이어질 수 있는지 체크
 		for(int k : hash.keySet()) {
 			int curx = k/10;
 			int cury = k%10;
 			
+			// 4방향으로 탐색
 			for(int z = 0 ; z < 4 ; z++) {
 				x = curx;
 				y = cury;
 				int distance = 0;
 				boolean flag = true;
+				
+				// 범위 안에서 계속 체크
 				while(x >= 0 && x < N && y >= 0 && y < M && flag) {
 					distance++;
 					x += dx[z];
 					y += dy[z];
 					
 					if(x >= 0 && x < N && y >= 0 && y < M) {
+						// 범위 안에서 나라를 만나면 무조건 종료
 						if(map[x][y] == 1) {
+							// 다른 섬이 다다르다면 최소 비용 갱신
 							if(hash.get(10*x+y) != hash.get(k) && distance > 2) {
 								dist[hash.get(10*x+y)][hash.get(k)] = Math.min(dist[hash.get(10*x+y)][hash.get(k)], distance-1);
 								dist[hash.get(k)][hash.get(10*x + y)] = dist[hash.get(10*x+y)][hash.get(k)];
@@ -122,12 +136,10 @@ public class Main {
 			}
 		}
 		
-//		for(int[] o : dist) {
-//			System.out.println(Arrays.toString(o));
-//		}
-		
+		// 최소 스패닝 트리 만들기
 		PriorityQueue<node> pq = new PriorityQueue<>();
 		
+		// 비용이 0과 최대값이 아닌값들은 모두 PriorityQueue에 넣어주기
 		for(int i = 0 ; i < sector ; i++) {
 			for(int j = i ; j < sector ; j++) {
 				if(dist[i][j] != 0 && dist[i][j] != Integer.MAX_VALUE) {
@@ -136,19 +148,20 @@ public class Main {
 			}
 		}
 		
+		// 조상 저장할 배열
 		parents = new int[sector];
 		
 		for(int i = 0 ; i < sector ; i++) {
 			parents[i] = i;
 		}
 		
+		// 총 드는 비용
 		int result = 0;
+		
+		// 섬끼리 연결한 선의 개수 -> N-1개가 되면 모두 연결됨
 		int n = 0;
-		
-//		for(node o : pq) {
-//			System.out.println(o.start + " " + o.end + " " + o.path);
-//		}
-		
+
+		// MST만들기
 		while(!pq.isEmpty()) {
 			node temp = pq.poll();
 			
@@ -159,28 +172,33 @@ public class Main {
 			}else {
 				continue;
 			}
+			
+			// N-1개의 선이 연결되면 종료
 			if(n == sector-1) break;
 		}
 		
+		// 모두 연결되었는지 체크하기
 		int k = findSet(0);
 		
+		// 모두 연결되었는지 체크하기
 		for(int i = 0 ; i < sector ; i++) {
 			if(findSet(i) == k) continue;
 			
+			// 연결안되어있다면 result에 -1값 저장하고 종료
 			result = -1;
 			break;
 		}
-		
 		System.out.println(result);
-		
 	}
 	 
+	// 조상 누군지 찾는 메소드
 	private static int findSet(int a) {
 		if(parents[a] == a) return a;
 		
 		return parents[a] = findSet(parents[a]);
 	}
 	
+	// 조상 합쳐주는 메소드
 	private static void unionSet(int a, int b) {
 		int pa = findSet(a);
 		int pb = findSet(b);
