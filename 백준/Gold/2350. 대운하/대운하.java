@@ -19,7 +19,7 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
         
-        
+        // 각 지점별 이동할 터널의 폭
         int[][] distance = new int[N][N];
         
         for(int i = 0 ; i < M ; i++) {
@@ -32,7 +32,7 @@ public class Main {
         	distance[b-1][a-1] = c;
         }
 
-        
+        // 플로이드로 터널의 최대의 폭으로 저장
         for(int i = 0 ; i < N ; i++) {
         	for(int j = 0 ; j < N ; j++) {
         		if(i == j) continue;
