@@ -13,6 +13,7 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
+        // 팬윅트리
         long[] fenwickTree = new long[N+1];
         long[] arr = new long[N+1];
 
@@ -40,6 +41,7 @@ public class Main {
         System.out.println(sb);
     }
 
+    // 팬윅트리 갱신
     private static void update(long[] tree, int num, long k){
         while(num < tree.length){
             tree[num] += k;
@@ -47,6 +49,7 @@ public class Main {
         }
     }
 
+    // 팬윅트리 구간합 
     private static long sum(long[] tree, int a){
         long ans = 0;
         while(a > 0){
