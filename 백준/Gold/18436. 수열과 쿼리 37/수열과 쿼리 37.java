@@ -27,6 +27,8 @@ public class Main {
         for(int i =1 ; i < N+1 ; i++){
             arr[i] = Integer.parseInt(st.nextToken());
         }
+        
+        // 세그먼트트리 초기 세팅
         init(1, N, 1);
 
         int M = Integer.parseInt(br.readLine());
@@ -38,12 +40,15 @@ public class Main {
             int c = Integer.parseInt(st.nextToken());
 
             switch(a){
+                    // 값 변경
                 case 1:
                     update(1, N, 1, b, c);
                     break;
+                    // 구간 내 짝수 갯수 출력
                 case 2:
                     sb.append(findEven(1, N, 1, b, c)).append("\n");
                     break;
+                    // 구간 내 홀수 갯수 출력
                 case 3:
                     sb.append(findOdd(1, N, 1, b, c)).append("\n");
                     break;
@@ -52,8 +57,10 @@ public class Main {
         System.out.println(sb);
     }
 
+    // 세그먼트트리 초기 세팅
     private static void init(int start, int end, int Node){
         if(start == end){
+            // 인덱스에 맞는 홀수, 짝수 갯수 세팅해주기
             if(arr[start]%2 == 0){
                 evenTree[Node] = 1;
                 oddTree[Node] = 0;
@@ -67,6 +74,7 @@ public class Main {
 
         int half = (start + end) / 2;
 
+        // 구간 나누어지면 계속 나누면서 진행
         init(start, half, Node*2);
         init(half+1, end, Node*2+1);
 
@@ -76,16 +84,19 @@ public class Main {
 
     private static void update(int start, int end, int Node, int index, int changenum){
 
+        // 변경하려는 값의 인덱스가 구간 내에 있을때만 진행
         if(start <= index && index <= end){
 
             int half = (start + end) / 2;
 
             if(start != end){
+                // 아직 나누어진다면 계속 나누면서 진행
                 update(start, half, Node*2, index, changenum);
                 update(half+1, end, Node*2+1, index, changenum);
                 evenTree[Node] = evenTree[Node*2] + evenTree[Node*2+1];
                 oddTree[Node] = oddTree[Node*2] + oddTree[Node*2+1];
             }else{
+                // 인덱스를 찾았다면 변경하려는 값에따라 해당 트리값 변경
                 if(changenum%2 == 0){
                     evenTree[Node] = 1;
                     oddTree[Node] = 0;
@@ -98,6 +109,7 @@ public class Main {
         }
     }
 
+    // 홀수값 찾기
     private static int findOdd(int start, int end, int Node, int left, int right){
         if(start > right || end < left){
             return 0;
@@ -112,6 +124,7 @@ public class Main {
         return findOdd(start, half, Node*2, left, right) + findOdd(half+1, end, Node*2+1, left, right);
     }
 
+    // 짝수값 찾기
     private static int findEven(int start, int end, int Node, int left, int right){
         if(start > right || end < left){
             return 0;
