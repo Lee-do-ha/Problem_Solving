@@ -26,6 +26,7 @@ public class Main {
             }
         }
 
+        // 1초때의 상황은 초기와 같음
         if(K == 1){
             for(int i = 0 ; i < N ; i++){
                 for(int j = 0 ; j < M ; j++){
@@ -33,6 +34,7 @@ public class Main {
                 }
                 System.out.println();
             }
+            // 짝수 일때는 모두 폭탄으로 둘러쌓임
         }else if(K%2 == 0){
             for(int i = 0 ; i < N ; i++){
                 for(int j = 0 ; j < M ; j++){
@@ -40,7 +42,10 @@ public class Main {
                 }
                 System.out.println();
             }
+            // 홀수 일때 폭탄 진행
         }else{
+            
+            // 4번 주기마다 똑같이 반복됨
             int num = 0;
             if(K%4 == 1){
                 num = 2;
