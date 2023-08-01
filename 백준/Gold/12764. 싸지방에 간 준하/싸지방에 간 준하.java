@@ -29,10 +29,13 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         PriorityQueue<user> pq = new PriorityQueue<>();
-        use = new int[1000001];
-        using = new int[1000001];
+
 
         int a = Integer.parseInt(br.readLine());
+
+        use = new int[a+1];
+        using = new int[a+1];
+        
         for(int i = 0 ; i < a ; i++){
             st = new StringTokenizer(br.readLine());
             pq.add(new user(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
