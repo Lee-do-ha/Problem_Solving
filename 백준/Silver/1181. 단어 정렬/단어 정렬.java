@@ -16,14 +16,16 @@ public class Main {
             }
             return o1.length() - o2.length();
         });
+        HashSet<String> hashSet = new HashSet<>();
 
         int N = Integer.parseInt(br.readLine());
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            if(priorityQueue.contains(str)) continue;
-            priorityQueue.add(str);
+            hashSet.add(str);
         }
 
+        priorityQueue.addAll(hashSet);
+        
         while (!priorityQueue.isEmpty()) {
             sb.append(priorityQueue.poll()).append("\n");
         }
