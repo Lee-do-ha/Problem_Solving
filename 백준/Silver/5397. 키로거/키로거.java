@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 public class Main {
@@ -10,8 +12,8 @@ public class Main {
 		
 		int n = Integer.parseInt(br.readLine());
 		
-		Stack<Character> left = new Stack<Character>();
-		Stack<Character> right = new Stack<Character>();
+		Deque<Character> left = new ArrayDeque<Character>();
+		Deque<Character> right = new ArrayDeque<Character>();
 		
 		for(int x = 0 ; x < n ; x++) {
 			
@@ -22,26 +24,26 @@ public class Main {
 				
 				if(cur == '<') {
 					if(!left.isEmpty()) {
-						right.push(left.pop());
+						right.addFirst(left.pollLast());
 					}
 				} else if(cur == '>') {
 					if(!right.isEmpty()) {
-						left.push(right.pop());
+						left.addLast(right.pollFirst());
 					}
 				} else if(cur == '-') {
 					if(!left.isEmpty()) {
-						left.pop();
+						left.pollLast();
 					}
 				} else {
-					left.add(cur);
+					left.addLast(cur);
 				}
 			}
 			
 			while (!left.isEmpty()) {
-				right.push(left.pop());
+				sb.append(left.pollFirst());
 			}
 			while (!right.isEmpty()) {
-				sb.append(right.pop());
+				sb.append(right.pollFirst());
 			}
 			sb.append("\n");
 		}
